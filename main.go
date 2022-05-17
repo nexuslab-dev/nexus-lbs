@@ -3,6 +3,10 @@ package main
 import (
 	"context"
 	"errors"
+	"math/rand"
+	"net/http"
+	"time"
+
 	"github.com/nexuslab-dev/nexus-lbs/config"
 	"github.com/nexuslab-dev/nexus-lbs/core"
 	"github.com/nexuslab-dev/nexus-lbs/httpapi"
@@ -10,9 +14,6 @@ import (
 	"github.com/prometheus/common/version"
 	"github.com/ttys3/lgr"
 	"github.com/ttys3/tracing"
-	"math/rand"
-	"net/http"
-	"time"
 )
 
 var ServiceName = "undefined"
@@ -21,7 +22,7 @@ var cfg config.Config
 
 // @title Nexus LBS Api
 // @version 1.0
-// @description This is a sample server Petstore server.
+// @description This is a simple lbs server, currently only query location by IP feature is implemented
 // @termsOfService https://github.com/nexuslab-dev/nexus-lbs
 
 // @BasePath /v1/api/
