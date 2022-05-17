@@ -20,16 +20,6 @@ LD_FLAGS_BASE := -X main.ServiceName=$(SERVICE_NAME) \
 				-X $(VERSION_PKG).BuildDate=$(shell date +%Y%m%d-%H%M%S)
 LD_FLAGS := -s -w $(LD_FLAGS_BASE)
 
-.PHONY: makefile/test
-makefile/test:
-	@echo "GO_MOD_NAME:      $(GO_MOD_NAME)"
-	@echo "GO_MOD_DOMAIN:    $(GO_MOD_DOMAIN)"
-	@echo "GO_MOD_BASE_NAME: $(GO_MOD_BASE_NAME)"
-	@echo "SERVICE_NAME:     $(SERVICE_NAME)"
-	@echo "TAG:              $(TAG)"
-	@echo "COMMIT:           $(COMMIT)"
-	@echo "IMAGE_TAG:        $(IMAGE_TAG)"
-
 .PHONY: build/debug
 build/debug:
 	@echo "\n building debug binary $(SERVICE_NAME)"
@@ -43,6 +33,18 @@ build/release:
 	@echo "\n building release binary $(SERVICE_NAME)"
 	@go env | grep -E $(IMPORTANT_GO_ENV_VARS)
 	/usr/bin/time -f '%Us user %Ss system %P cpu %es total' go build -trimpath -ldflags="$(LD_FLAGS)" -o $(SERVICE_NAME)
+
+
+.PHONY: makefile/test
+makefile/test:
+	@echo "GO_MOD_NAME:      $(GO_MOD_NAME)"
+	@echo "GO_MOD_DOMAIN:    $(GO_MOD_DOMAIN)"
+	@echo "GO_MOD_BASE_NAME: $(GO_MOD_BASE_NAME)"
+	@echo "SERVICE_NAME:     $(SERVICE_NAME)"
+	@echo "TAG:              $(TAG)"
+	@echo "COMMIT:           $(COMMIT)"
+	@echo "IMAGE_TAG:        $(IMAGE_TAG)"
+
 
 .PHONY: image
 image: build/release ipdb/GeoIP2-City.mmdb ipdb/dbip-country.mmdb
