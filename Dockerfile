@@ -20,7 +20,10 @@ RUN chmod +x /tini
 
 WORKDIR /usr/local/bin/
 
-ENV TZ=Asia/Shanghai
+ENV TZ=Asia/Shanghai \
+SENTRY_DSN="" \
+SENTRY_ENVIRONMENT="" \
+SENTRYGODEBUG=""
 
 VOLUME /etc/nexus-lbs
 
