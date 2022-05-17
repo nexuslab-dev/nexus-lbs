@@ -1,2 +1,3 @@
 # nexus-lbs
-lbs service
+
+simple lbs service using mmdb

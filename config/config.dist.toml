@@ -1,0 +1,18 @@
+http_addr = ''
+grpc_addr = ''
+tracing = false
+profile = false
+metric = false
+otlp_grpc_endpoint = ''
+[log]
+  level = ''
+  output = ''
+  encoding = ''
+  disable_stacktrace = false
+
+[sentry]
+  dsn = ''
+  env = ''
+  flush_wait_sec = 0
+
+
