@@ -1,1 +1,4 @@
 /nexus-lbs
+*.local.toml
+/ipdb
+*.mmdb

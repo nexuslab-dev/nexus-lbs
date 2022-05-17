@@ -15,4 +15,8 @@ otlp_grpc_endpoint = ''
   env = ''
   flush_wait_sec = 0
 
+[geo_db]
+  country_db_path = ''
+  city_db_path = ''
+
 

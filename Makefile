@@ -70,3 +70,11 @@ makefile/test:
 	@echo "GO_MOD_DOMAIN:    $(GO_MOD_DOMAIN)"
 	@echo "GO_MOD_BASE_NAME: $(GO_MOD_BASE_NAME)"
 	@echo "SERVICE_NAME:     $(SERVICE_NAME)"
+
+.PHONY: swag
+swag:
+	swag init
+
+.PHONY: test
+test:
+	richgo test -v ./...
