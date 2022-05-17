@@ -1,4 +1,7 @@
 /nexus-lbs
+/nexus-lbs_darwin_amd64
+/nexus-lbs_windows_amd64.exe
+
 *.local.toml
 /ipdb
 *.mmdb

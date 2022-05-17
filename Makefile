@@ -35,6 +35,13 @@ build/release:
 	/usr/bin/time -f '%Us user %Ss system %P cpu %es total' go build -trimpath -ldflags="$(LD_FLAGS)" -o $(SERVICE_NAME)
 
 
+.PHONY: build/cross
+build/cross:
+	@echo "\n building darwin release binary $(SERVICE_NAME)"
+	GOOS=darwin GOARCH=amd64 go build -trimpath -ldflags="$(LD_FLAGS)" -o $(SERVICE_NAME)_darwin_amd64
+	@echo "\n building windows release binary $(SERVICE_NAME)"
+	GOOS=windows GOARCH=amd64 go build -trimpath -ldflags="$(LD_FLAGS)" -o $(SERVICE_NAME)_windows_amd64.exe
+
 .PHONY: makefile/test
 makefile/test:
 	@echo "GO_MOD_NAME:      $(GO_MOD_NAME)"
