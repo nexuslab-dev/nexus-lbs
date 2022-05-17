@@ -4,9 +4,11 @@ GO_MOD_BASE_NAME := $(shell echo $(GO_MOD_NAME) | awk -F '/' '{print $$NF}')
 SERVICE_NAME := $(GO_MOD_BASE_NAME)
 
 NOW := $(shell date +'%Y%m%d%H%M%S')
-TAG := $(shell git describe --always --tags --abbrev=0 | tr -d "[\r\n]")
+TAG := $(shell git describe --always --tags --abbrev=0 | tr -d "[v\r\n]")
 COMMIT := $(shell git rev-parse --short HEAD| tr -d "[ \r\n\']")
 VERSION_PKG := github.com/prometheus/common/version
+
+IMAGE_TAG := "v"$(TAG)"-"$(COMMIT)
 
 IMPORTANT_GO_ENV_VARS := "GOPATH|GO111MODULE|GOARCH|GOCACHE|GOMODCACHE|GONOPROXY|GONOSUMDB|GOPRIVATE|GOPROXY|GOSUMDB|GOMOD|CGO"
 
@@ -18,6 +20,15 @@ LD_FLAGS_BASE := -X main.ServiceName=$(SERVICE_NAME) \
 				-X $(VERSION_PKG).BuildDate=$(shell date +%Y%m%d-%H%M%S)
 LD_FLAGS := -s -w $(LD_FLAGS_BASE)
 
+.PHONY: makefile/test
+makefile/test:
+	@echo "GO_MOD_NAME:      $(GO_MOD_NAME)"
+	@echo "GO_MOD_DOMAIN:    $(GO_MOD_DOMAIN)"
+	@echo "GO_MOD_BASE_NAME: $(GO_MOD_BASE_NAME)"
+	@echo "SERVICE_NAME:     $(SERVICE_NAME)"
+	@echo "TAG:              $(TAG)"
+	@echo "COMMIT:           $(COMMIT)"
+	@echo "IMAGE_TAG:        $(IMAGE_TAG)"
 
 .PHONY: build/debug
 build/debug:
@@ -32,6 +43,10 @@ build/release:
 	@echo "\n building release binary $(SERVICE_NAME)"
 	@go env | grep -E $(IMPORTANT_GO_ENV_VARS)
 	/usr/bin/time -f '%Us user %Ss system %P cpu %es total' go build -trimpath -ldflags="$(LD_FLAGS)" -o $(SERVICE_NAME)
+
+.PHONY: image
+image: build/release ipdb/GeoIP2-City.mmdb ipdb/dbip-country.mmdb
+	podman build -t $(SERVICE_NAME):$(IMAGE_TAG) .
 
 .PHONY: clean
 clean:
@@ -63,13 +78,6 @@ changelog:
 .PHONY: gitleaks
 gitleaks:
 	gitleaks detect -v
-
-.PHONY: makefile/test
-makefile/test:
-	@echo "GO_MOD_NAME:      $(GO_MOD_NAME)"
-	@echo "GO_MOD_DOMAIN:    $(GO_MOD_DOMAIN)"
-	@echo "GO_MOD_BASE_NAME: $(GO_MOD_BASE_NAME)"
-	@echo "SERVICE_NAME:     $(SERVICE_NAME)"
 
 .PHONY: swag
 swag:
