@@ -82,6 +82,17 @@ definitions:
       message:
         type: string
     type: object
+  v1.CityResponseBatch:
+    properties:
+      code:
+        type: string
+      data:
+        additionalProperties:
+          $ref: '#/definitions/core.CityRecord'
+        type: object
+      message:
+        type: string
+    type: object
   v1.CountryResponse:
     properties:
       code:
@@ -91,9 +102,30 @@ definitions:
       message:
         type: string
     type: object
+  v1.CountryResponseBatch:
+    properties:
+      code:
+        type: string
+      data:
+        additionalProperties:
+          $ref: '#/definitions/core.CountryRecord'
+        type: object
+      message:
+        type: string
+    type: object
+  v1.RequestBatch:
+    properties:
+      ip:
+        items:
+          type: string
+        type: array
+      lang:
+        type: string
+    type: object
 info:
   contact: {}
-  description: This is a sample server Petstore server.
+  description: This is a simple lbs server, currently only query location by IP feature
+    is implemented
   termsOfService: https://github.com/nexuslab-dev/nexus-lbs
   title: Nexus LBS Api
   version: "1.0"
@@ -121,6 +153,28 @@ paths:
       summary: query city by IP
       tags:
       - lbs
+  /city/batch:
+    post:
+      consumes:
+      - application/json
+      description: batch query city by IPs, with optional lang param
+      parameters:
+      - description: json payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/v1.RequestBatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.CityResponseBatch'
+      summary: batch query city by IPs
+      tags:
+      - lbs
   /country/{ip}:
     get:
       description: query country by IP, with optional lang param
@@ -142,6 +196,28 @@ paths:
           schema:
             $ref: '#/definitions/v1.CountryResponse'
       summary: query country by IP
+      tags:
+      - lbs
+  /country/batch:
+    post:
+      consumes:
+      - application/json
+      description: batch query country by IPs, with optional lang param
+      parameters:
+      - description: json payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/v1.RequestBatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.CountryResponseBatch'
+      summary: batch query country by IPs
       tags:
       - lbs
 swagger: "2.0"

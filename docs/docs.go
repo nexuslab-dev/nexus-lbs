@@ -17,6 +17,40 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/city/batch": {
+            "post": {
+                "description": "batch query city by IPs, with optional lang param",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "lbs"
+                ],
+                "summary": "batch query city by IPs",
+                "parameters": [
+                    {
+                        "description": "json payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.RequestBatch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.CityResponseBatch"
+                        }
+                    }
+                }
+            }
+        },
         "/city/{ip}": {
             "get": {
                 "description": "query city by IP, with optional lang param",
@@ -47,6 +81,40 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/v1.CityResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/country/batch": {
+            "post": {
+                "description": "batch query country by IPs, with optional lang param",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "lbs"
+                ],
+                "summary": "batch query country by IPs",
+                "parameters": [
+                    {
+                        "description": "json payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.RequestBatch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.CountryResponseBatch"
                         }
                     }
                 }
@@ -216,6 +284,23 @@ const docTemplate = `{
                 }
             }
         },
+        "v1.CityResponseBatch": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/core.CityRecord"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "v1.CountryResponse": {
             "type": "object",
             "properties": {
@@ -226,6 +311,37 @@ const docTemplate = `{
                     "$ref": "#/definitions/core.CountryRecord"
                 },
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.CountryResponseBatch": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/core.CountryRecord"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.RequestBatch": {
+            "type": "object",
+            "properties": {
+                "ip": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "lang": {
                     "type": "string"
                 }
             }
@@ -240,7 +356,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/v1/api/",
 	Schemes:          []string{},
 	Title:            "Nexus LBS Api",
-	Description:      "This is a sample server Petstore server.",
+	Description:      "This is a simple lbs server, currently only query location by IP feature is implemented",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

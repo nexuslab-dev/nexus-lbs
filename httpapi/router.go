@@ -32,8 +32,12 @@ func Register(e *echo.Echo, serviceName string, countryQuery, cityQuery *core.Ge
 	v1api := e.Group("/v1/api/")
 
 	ipGeo := v1.New(countryQuery, cityQuery)
+	
 	v1api.GET("city/:ip", ipGeo.CityHandler)
+	v1api.POST("city/batch", ipGeo.CityBatchHandler)
+
 	v1api.GET("country/:ip", ipGeo.CountryHandler)
+	v1api.POST("country/batch", ipGeo.CountryBatchHandler)
 }
 
 const (

@@ -26,3 +26,24 @@ type CityResponse struct {
 	Message string           `json:"message"`
 	Data    *core.CityRecord `json:"data,omitempty"`
 }
+
+// batch api
+
+type RequestBatch struct {
+	IP   []string `param:"ip" query:"ip" json:"ip"`
+	Lang string   `param:"lang" query:"lang" json:"lang"`
+}
+
+// CountryResponseBatch for Declarative Comments
+type CountryResponseBatch struct {
+	Code    Code                           `json:"code"`
+	Message string                         `json:"message"`
+	Data    map[string]*core.CountryRecord `json:"data,omitempty"`
+}
+
+// CityResponseBatch for Declarative Comments
+type CityResponseBatch struct {
+	Code    Code                        `json:"code"`
+	Message string                      `json:"message"`
+	Data    map[string]*core.CityRecord `json:"data,omitempty"`
+}
