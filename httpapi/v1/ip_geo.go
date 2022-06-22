@@ -5,6 +5,7 @@ import (
 	"github.com/nexuslab-dev/nexus-lbs/core"
 	"github.com/ttys3/lgr"
 	"net/http"
+	"net/url"
 )
 
 type IPGeo struct {
@@ -37,6 +38,7 @@ func (a *IPGeo) CountryHandler(c echo.Context) error {
 		})
 	}
 
+	req.IP, _ = url.QueryUnescape(req.IP)
 	country, err := a.country.Country(req.IP, req.Lang)
 	if err != nil {
 		lgr.S().Error("query country from db failed", "err", err, "req", req)
@@ -109,6 +111,7 @@ func (a *IPGeo) CityHandler(c echo.Context) error {
 		})
 	}
 
+	req.IP, _ = url.QueryUnescape(req.IP)
 	city, err := a.city.City(req.IP, req.Lang)
 	if err != nil {
 		lgr.S().Error("query city from db failed", "err", err, "req", req)
