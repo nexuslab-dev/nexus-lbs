@@ -9,9 +9,9 @@ RUN mkdir /etc/nexus-lbs; \
 
 COPY nexus-lbs  /usr/local/bin/
 
-COPY ipdb/GeoIP2-City.mmdb /etc/nexus-lbs/
+COPY ipdb/GeoLite2-City.mmdb /etc/nexus-lbs/
 
-COPY ipdb/dbip-country.mmdb /etc/nexus-lbs/
+COPY ipdb/GeoLite2-Country.mmdb /etc/nexus-lbs/
 
 # Add Tini
 ENV TINI_VERSION v0.19.0
