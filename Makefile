@@ -54,7 +54,7 @@ makefile/test:
 
 
 .PHONY: image
-image: build/release ipdb/GeoLite2-City.mmdb ipdb/GeoLite2-Country.mmdb
+image: build/release ipdb/dbip-city-lite-2022-06.mmdb ipdb/dbip-country-lite-2022-06.mmdb
 	podman build -t $(SERVICE_NAME):$(IMAGE_TAG) .
 
 .PHONY: clean
