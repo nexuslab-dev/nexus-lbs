@@ -44,3 +44,23 @@ func TestCountryFromCityQuery(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestCityFromCityQueryV6(t *testing.T) {
+	q, err := New("../ipdb/dbip-city-lite-2022-06.mmdb")
+	if err != nil {
+		t.Fatal(err)
+	}
+	c, err := q.City("2001:bc8:1200:3:208:a2ff:fe0c:5d72", "en")
+	if err != nil {
+		t.Fatal(err)
+	}
+	out, _ := json.Marshal(c)
+	t.Logf("Country=%s", out)
+	if c.Country.IsoCode != "FR" {
+		t.Fail()
+	}
+
+	if c.City.Name != "Paris" {
+		t.Fail()
+	}
+}
