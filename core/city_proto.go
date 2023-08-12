@@ -22,11 +22,11 @@ type City struct {
 }
 
 type Location struct {
-	AccuracyRadius uint16  `json:"accuracy_radius"`
-	Latitude       float64 `json:"latitude"`
-	Longitude      float64 `json:"longitude"`
-	MetroCode      uint    `json:"metro_code"`
-	TimeZone       string  `json:"time_zone"`
+	TimeZone       string  `maxminddb:"time_zone"`
+	Latitude       float64 `maxminddb:"latitude"`
+	Longitude      float64 `maxminddb:"longitude"`
+	MetroCode      uint    `maxminddb:"metro_code"`
+	AccuracyRadius uint16  `maxminddb:"accuracy_radius"`
 }
 
 func FromMaxmindCity(city *geoip2.City, maxmindLang string) *CityRecord {

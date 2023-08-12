@@ -1,11 +1,12 @@
 package v1
 
 import (
-	"github.com/labstack/echo/v4"
-	"github.com/nexuslab-dev/nexus-lbs/core"
-	"github.com/ttys3/lgr"
+	"log/slog"
 	"net/http"
 	"net/url"
+
+	"github.com/labstack/echo/v4"
+	"github.com/nexuslab-dev/nexus-lbs/core"
 )
 
 type IPGeo struct {
@@ -41,7 +42,7 @@ func (a *IPGeo) CountryHandler(c echo.Context) error {
 	req.IP, _ = url.QueryUnescape(req.IP)
 	country, err := a.country.Country(req.IP, req.Lang)
 	if err != nil {
-		lgr.S().Error("query country from db failed", "err", err, "req", req)
+		slog.Error("query country from db failed", "err", err, "req", req)
 		return c.JSON(http.StatusOK, &Response{
 			Code:    ErrGeoip,
 			Message: "query country from db failed",
@@ -77,7 +78,7 @@ func (a *IPGeo) CountryBatchHandler(c echo.Context) error {
 	for _, ip := range req.IP {
 		country, err := a.country.Country(ip, req.Lang)
 		if err != nil {
-			lgr.S().Error("query country from db failed", "err", err, "ip", ip)
+			slog.Error("query country from db failed", "err", err, "ip", ip)
 			return c.JSON(http.StatusOK, &Response{
 				Code:    ErrGeoip,
 				Message: "query country from db failed, failed IP=" + ip,
@@ -114,7 +115,7 @@ func (a *IPGeo) CityHandler(c echo.Context) error {
 	req.IP, _ = url.QueryUnescape(req.IP)
 	city, err := a.city.City(req.IP, req.Lang)
 	if err != nil {
-		lgr.S().Error("query city from db failed", "err", err, "req", req)
+		slog.Error("query city from db failed", "err", err, "req", req)
 		return c.JSON(http.StatusOK, &Response{
 			Code:    ErrGeoip,
 			Message: "query city from db failed",
@@ -150,7 +151,7 @@ func (a *IPGeo) CityBatchHandler(c echo.Context) error {
 	for _, ip := range req.IP {
 		city, err := a.city.City(ip, req.Lang)
 		if err != nil {
-			lgr.S().Error("query city from db failed", "err", err, "ip", ip)
+			slog.Error("query city from db failed", "err", err, "ip", ip)
 			return c.JSON(http.StatusOK, &Response{
 				Code:    ErrGeoip,
 				Message: "query city from db failed, failed IP=" + ip,

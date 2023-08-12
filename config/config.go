@@ -2,9 +2,12 @@ package config
 
 import (
 	"errors"
-	v10validator "github.com/go-playground/validator/v10"
-	"github.com/ttys3/lgr"
+	"log/slog"
 	"os"
+
+	"github.com/ttys3/slogx"
+
+	v10validator "github.com/go-playground/validator/v10"
 )
 
 const (
@@ -65,15 +68,15 @@ func (b *Config) InitDefault() {
 }
 
 func (b *Config) InitOtlpGrpcEndpointFromEnv() {
-	lgr.S().Info("init otlp_grpc_endpoint from env")
+	slog.Info("init otlp_grpc_endpoint from env")
 	if b.OtlpGrpcEndpoint != "" {
 		return
 	}
 	if tmp := os.Getenv(EnvOtlpGrpcEndpoint); tmp != "" {
 		b.OtlpGrpcEndpoint = tmp
-		lgr.S().Info("otlp_grpc_endpoint is empty, get from env var", "otlp_grpc_endpoint", tmp)
+		slog.Info("otlp_grpc_endpoint is empty, get from env var", "otlp_grpc_endpoint", tmp)
 	} else {
-		lgr.S().Warn("otlp_grpc_endpoint is empty")
+		slog.Warn("otlp_grpc_endpoint is empty")
 	}
 }
 
@@ -84,7 +87,7 @@ const (
 )
 
 func (b *Config) InitLogger(serviceName, version string) {
-	lgr.S().Info("init logger")
+	slog.Info("init logger")
 	if b.Log.Level == "" {
 		b.Log.Level = DefaultLogLevel
 	}
@@ -97,15 +100,8 @@ func (b *Config) InitLogger(serviceName, version string) {
 		b.Log.Output = DefaultLogOutput
 	}
 
-	logger := lgr.NewLogger(
-		lgr.WithInitialFields("service", serviceName, "version", version),
-		lgr.WithColorLevel(true),
-		lgr.WithLevel(b.Log.Level),
-		lgr.WithOutputPaths(b.Log.Output),
-		lgr.WithEncoding(string(b.Log.Encoding)),
-		lgr.WithDisableStacktrace(b.Log.DisableStacktrace),
-	)
-	lgr.ReplaceGlobal(logger)
+	logger := slogx.New(slogx.WithTracing(), slogx.WithLevel(b.Log.Level), slogx.WithOutput(b.Log.Output))
+	slog.SetDefault(logger)
 }
 
 func (b *Config) Validate() error {

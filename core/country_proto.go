@@ -21,16 +21,16 @@ type Country struct {
 }
 
 type MmdbContinent struct {
+	Names     map[string]string `maxminddb:"names"`
 	Code      string            `maxminddb:"code"`
 	GeoNameID uint              `maxminddb:"geoname_id"`
-	Names     map[string]string `maxminddb:"names"`
 }
 
 type MmdbCountry struct {
+	Names             map[string]string `maxminddb:"names"`
+	IsoCode           string            `maxminddb:"iso_code"`
 	GeoNameID         uint              `maxminddb:"geoname_id"`
 	IsInEuropeanUnion bool              `maxminddb:"is_in_european_union"`
-	IsoCode           string            `maxminddb:"iso_code"`
-	Names             map[string]string `maxminddb:"names"`
 }
 
 func FromMaxmindContinentField(c MmdbContinent, maxmindLang string) *Continent {
