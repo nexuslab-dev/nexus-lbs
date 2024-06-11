@@ -1,10 +1,10 @@
 package metrics
 
 import (
-	"github.com/prometheus/common/version"
 	"strings"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors/version"
 )
 
 func MustRegisterVersionCollector(serviceName string) {
